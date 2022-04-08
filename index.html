@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>measure</button>
+    <p></p>
+  </body>
+  <script>
+    const callApi = async (lat, lng) => {
+      const res = await fetch(
+        `http://geoapi.heartrails.com/api/json?method=searchByGeoLocation&x=${lng}&y=${lat}`
+      );
+      const {
+        response: { location },
+      } = await res.json();
+      document.querySelector(
+        "p"
+      ).textContent = `${location[0]["prefecture"]}${location[0]["city"]}${location[0]["town"]}にいるね🤡🤡🤡🤡🤡🤡🤡`;
+    };
+    document.querySelector("button").addEventListener("click", () => {
+      window.navigator.geolocation.getCurrentPosition(
+        (success) => {
+          const {
+            coords: { latitude, longitude },
+          } = success;
+          callApi(latitude, longitude);
+        },
+        (err) => {
+          console.error(err);
+        },
+        [0]
+      );
+    });
+    // thanks: 出典:「位置参照情報」(国土交通省)の加工情報・「HeartRails Geo API」(HeartRails Inc.)
+  </script>
+</html>
